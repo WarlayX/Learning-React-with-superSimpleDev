@@ -18,12 +18,18 @@
         function saveInputText (event) {
           setInputText(event.target.value);
         }
+        function resetText (){
+          setInputText('');
+        }
+        function setExampleText (){
+          setInputText('Alice');
+        }
         return (
           <>
-            <input onChange={saveInputText} placeholder = "Type a name here"/>
-            <p>{inputText}</p>
-            <button>Reset</button>
-            <button>Example</button>
+            <input onChange={saveInputText} value={inputText} placeholder = "Type a name here"/>
+            <p>Hello {inputText}</p>
+            <button onClick={resetText}>Reset</button>
+            <button onClick={setExampleText}>Example</button>
           </>
         );
       }
