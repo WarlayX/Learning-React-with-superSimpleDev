@@ -74,19 +74,12 @@
       
       function ChatInput({ chatMessages, setChatMessages }) {
         const [inputText, setInputText] = React.useState('');
-        const [isLoading, setIsLoading] = React.useState(false);
 
         function saveInputText(event) {
           setInputText(event.target.value);
         }
 
-        async function sendMessage() {
-          if (isLoading || inputText === '') {
-            return;
-          }
-          setIsLoading(true);
-          setInputText('');
-
+        function sendMessage() {
           const newChatMessages = [
             ...chatMessages,
             {
@@ -96,24 +89,19 @@
             }
           ];
 
+          setChatMessages (newChatMessages);
+
+          const response = Chatbot.getResponse(inputText);
           setChatMessages([
             ...newChatMessages,
             {
-              message: 'Loading...',
+              message:response,
               sender: 'robot',
               id: crypto.randomUUID()
             }
           ]);
-          
-          setIsLoading(false);
-        }
 
-        function handleKeyDown(event) {
-          if (event.key === 'Enter') {
-            sendMessage();
-          } else if (event.key === 'Escape') {
-            setInputText('');
-          }
+          setInputText('');
         }
 
         return (
@@ -122,7 +110,6 @@
               placeholder="Send a message to Chatbot"
               size="30"
               onChange={saveInputText}
-              onKeyDown={handleKeyDown}
               value={inputText}
               className="chat-input"
             />
@@ -156,13 +143,12 @@
         React.useEffect(() => {
           const containerElem = chatMessagesRef.current;
           if (containerElem){
-            containerElem.scrollTop = container.ELe 
+            containerElem.scrollTop = containerElem.scrollHeight;
           }
-        }, [chatMessages]);
+        }, [chatMessages ]);
 
         return (
-          <div className="chat-messages-container" ref={chatMessagesRef}>
-            
+          <div className="chat-messages-container" ref={chatMessagesRef}>            
             {chatMessages.map((chatMessage) => {
               return (
                 <ChatMessage
